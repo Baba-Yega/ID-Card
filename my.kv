@@ -1,0 +1,112 @@
+<CreateAccountWindow>:
+    name: "create"
+
+    namee: namee
+    email: email
+    password: passw
+
+    BoxLayout:
+        orientation: "vertical"
+
+        MDLabel:
+            text: "Create an Account"
+            font_size: "20sp"
+
+        MDTextField:
+            id: namee
+            hint_text: "Name:"
+            mode: "rectangle"
+            size_hint_x: None
+            width: "200dp"
+            multiline: False
+
+        MDTextField:
+            id: email
+            hint_text: "Email:"
+            mode: "rectangle"
+            size_hint_x: None
+            width: "200dp"
+            multiline: False
+
+        MDTextField:
+            id: passw
+            hint_text: "Password:"
+            mode: "rectangle"
+            size_hint_x: None
+            width: "200dp"
+            multiline: False
+            password: True
+
+        MDFillRoundFlatButton:
+            text: "Use existing account?"
+            on_release:
+                root.manager.transition.direction = "left"
+                root.login()
+
+        MDFillRoundFlatButton:
+            text: "Submit"
+            on_release:
+                root.manager.transition.direction = "left"
+                root.signup_button()
+
+<LoginWindow>:
+    name: "login"
+
+    email: email
+    password: password
+
+    BoxLayout:
+        orientation: "vertical"
+
+        MDTextField:
+            id: email
+            hint_text: "Email:"
+            mode: "rectangle"
+            size_hint_x: None
+            width: "200dp"
+            multiline: False
+
+        MDTextField:
+            id: password
+            hint_text: "Password:"
+            mode: "rectangle"
+            size_hint_x: None
+            width: "200dp"
+            multiline: False
+            password: True
+
+        MDFillRoundFlatButton:
+            text: "Login"
+            on_release:
+                root.manager.transition.direction = "up"
+                root.loginBtn()
+
+        MDFillRoundFlatButton:
+            text: "Create an account?"
+            on_release:
+                root.manager.transition.direction = "right"
+                root.createBtn()
+
+<MainWindow>:
+    n: n
+    email: email
+    created: created
+
+    FloatLayout:
+        MDLabel:
+            id: n
+            text: "Account Name: "
+
+        MDLabel:
+            id: email
+            text: "Email: "
+
+        MDLabel:
+            id: created
+            text: "Created: "
+
+        MDFillRoundFlatButton:
+            text: "Log Out"
+            on_release:
+                app.root.current = "login"
+                root.manager.transition.direction = "down"

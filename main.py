@@ -13,6 +13,7 @@ from kivy.uix.filechooser import FileChooser
 from kivymd.uix.filemanager import MDFileManager
 from io import BytesIO
 from PIL import Image
+from PIL import ExifTags  # To access EXIF data
 from kivy.uix.image import Image as KivyImage, CoreImage
 from kivy.graphics.texture import Texture
 import subprocess
@@ -134,6 +135,25 @@ class ProfileWindow(Screen):
             # Convert the binary blob data to an image
             if profile_image_data:
                 image = Image.open(BytesIO(profile_image_data))
+
+                # Check for the image's EXIF data to fix orientation
+                try:
+                    for orientation in ExifTags.TAGS.keys():
+                        if ExifTags.TAGS[orientation] == 'Orientation':
+                            break
+                    exif = dict(image._getexif().items())
+
+                    if exif[orientation] == 3:
+                        image = image.rotate(180, expand=True)
+                    elif exif[orientation] == 6:
+                        image = image.rotate(270, expand=True)
+                    elif exif[orientation] == 8:
+                        image = image.rotate(90, expand=True)
+                except (AttributeError, KeyError, IndexError):
+                    # No EXIF data or no 'Orientation' tag found
+                    pass
+
+                image = image.rotate(180)
             
                 # Create a Kivy Texture from the PIL Image
                 kivy_texture = Texture.create(size=(image.width, image.height))
@@ -156,7 +176,7 @@ class ProfileWindow(Screen):
         except Exception as e:
             print(f"Error opening the captured image: {e}")
 
-db = DataBase("localhost", "root", "", "id_card")
+db = DataBase("id_card.db")
 
 class WindowManager(ScreenManager):
     pass
@@ -506,7 +526,7 @@ ScreenManager:
                 orientation: "vertical"
                 size_hint: [0.4, 0.6]
                 pos_hint: {"center_x": 0.5, "center_y": 0.5}
-                md_bg_color: 128/255,128/255,128/255,1 # Set the card background color
+                md_bg_color: "lightblue"
 
                 MDIconButton:
                     icon: "account-school"
@@ -515,15 +535,17 @@ ScreenManager:
                     id: profile_image
                     source: ""
                     size_hint: 1, None
-                    height: "150dp"
+                    height: "170dp"
+                    width: "200dp"
                     allow_stretch: True  # Maintain aspect ratio while fitting within the space
                     keep_ratio: True
 
                 MDLabel:
                     id: n
                     text: "Name: "
+                    font_size: 25
                     halign: 'center'
-                    theme_text_color: "Secondary"
+                    theme_text_color: "Primary"
 
                 MDLabel:
                     id: mat_no
@@ -534,8 +556,9 @@ ScreenManager:
                 MDLabel:
                     id: department
                     text: "Department: "
+                    font_size: 20
                     halign: 'center'
-                    theme_text_color: "Secondary"
+                    theme_text_color: "Primary"
 
                 MDLabel:
                     id: level

@@ -19,6 +19,9 @@ from kivy.graphics.texture import Texture
 import subprocess
 
 from database import DataBase
+from kivy.core.window import Window
+
+Window.size = 	(360, 640)
 
 class HomeWindow(Screen):
     pass
@@ -245,7 +248,7 @@ ScreenManager:
                 MDLabel:
                     pos: self.pos
                     text:"STUDENT ID CARD"
-                    font_size: 60
+                    font_size: 50
                     halign:"center"
                     theme_text_color:"Primary"
                     bold: True
@@ -446,8 +449,8 @@ ScreenManager:
 
             MDLabel:
                 pos: self.pos
-                text:"APP"
-                font_size: 80
+                text:"ID CARD"
+                font_size: 60
                 halign:"center"
                 theme_text_color:"Primary"
                 bold: True
@@ -456,7 +459,7 @@ ScreenManager:
             MDLabel:
                 #pos: self.pos
                 text:"LOGIN PAGE"
-                font_size: 80
+                font_size: 50
                 halign:"center"
                 theme_text_color:"Custom"
                 text_color: 0,1,0,1
@@ -524,8 +527,10 @@ ScreenManager:
             MDCard:
                 id: card_widget
                 orientation: "vertical"
-                size_hint: [0.4, 0.6]
+                size_hint: [0.8, 0.6]
                 pos_hint: {"center_x": 0.5, "center_y": 0.5}
+                border_radius: 20
+                radius: [30]
                 md_bg_color: "lightblue"
 
                 MDIconButton:
